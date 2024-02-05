@@ -1,2 +1,2 @@
 # SSD-posture-doctor
-Assess a posture with only a camera and internet connection
+Assess various postures with only a camera and internet connection
