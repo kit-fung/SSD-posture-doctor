@@ -1,0 +1,127 @@
+@property --t {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0;
+}
+@property --u {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0;
+}
+@property --v {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0;
+}
+@property --w {
+    syntax: "<number>";
+    inherits: false;
+    initial-value: 0;
+}
+@property --T {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+}
+@property --U {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+}
+@property --V {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+}
+@property --W {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+}
+html, body{
+    block-size: 100%;
+    scroll-snap-type: y mandatory;
+    scroll-snap-stop: always;
+    overflow-x: hidden;
+    /*block-size: 100%; overflow-x: hidden;*/ /* botch scroll listener, but necessary to smooth scroll*/
+}
+body{
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+}
+
+/*::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}*/
+
+a {
+    color: unset;
+    text-decoration: none;
+}
+
+img {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+svg {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+canvas {
+    display: block;
+    position: absolute;
+}
+.button{
+    --t:0;
+    --T: var(--t);
+    --U: var(--u);
+    --W: calc(max(sin(180deg * var(--u)),0) + max(sin(-180deg * var(--u)),0));
+    transition: --t 0.2s, --u 0.2s;
+}
+.button:hover{
+    --t:1;
+}
+.quality_label{
+    position: absolute;
+    bottom: 20%;
+    left: 60%;
+    --size: 150px;
+    width: var(--size);
+    aspect-ratio: 1/1;
+    font-size: 0;
+    user-select: none;
+}
+.dropdown_glyph{
+    display: inline-block;
+    width: 100%;
+    aspect-ratio: 1/1;
+    background-color: orange;
+    border-radius: 5px;
+}
+#main{
+    width: 100svw;
+    height: 100svh;
+    background-color: rgb(100,120,255);
+    position: absolute;
+    overflow: hidden;
+}
+#right_wrapper{
+    position: absolute;
+    right:0;
+    top:0;
+    width:0;
+    height:0;
+    overflow: visible;
+}
+@media only screen and (max-width:960px),
+(max-height:540px) {
+
+}

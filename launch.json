@@ -1,0 +1,13 @@
+{
+   "name": "Chrome debug",
+    "type": "chrome",
+    "request": "launch",
+    "url": "http://localhost:4200",
+    "webRoot": "${workspaceFolder}",
+    "preLaunchTask": "starter",
+    "sourceMaps": true,
+    "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+    ]
+}
