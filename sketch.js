@@ -1,5 +1,8 @@
 let video;
 let label = "waiting...";
+let confidence = null;
+let sec_label = null;
+let sec_confidence = null;
 let classifier;
 let snake;
 let rez = 20;
@@ -14,10 +17,11 @@ function preload() {
 
 function setup() {
 
-  createCanvas(200, 300);
+  createCanvas(300, 400);
 
   video = createCapture(VIDEO);
   video.hide();
+  video.id('viewport')
 
   classifyVideo();
 
@@ -37,7 +41,11 @@ function gotResults(error, results) {
     console.error(error);
     return;
   }
-  label = results[0].label;
+    label = results[0].label;
+    confidence = results[0].confidence;
+    sec_label = results[1].label;
+    sec_confidence = results[1].confidence;
+    //console.log(results[0].confidence)
   // Step E3, add a call function " controlSnake(); " in line 42
   
   classifyVideo();
@@ -66,11 +74,14 @@ function keyPressed() {
 function draw() {
   
   background(220);
-  textSize(32);
+  image(video, 0, 150, width, width * video.height / video.width);
+  textSize(30);
   fill(255);
-  text(label, 10, 50);
-  image(video, 0, 100, video.width * 0.3, video.height * 0.3);
-  
+  text(label, 10, 30);
+  text(confidence === null ? "":confidence.toString(), 10, 80);
+  text(sec_label === null ? "" : sec_label, 10, 130);
+  text(sec_confidence === null ? "":sec_confidence.toString(), 10, 180);
+  /*
   scale(rez);
   
   if (snake.eat(food)) {
@@ -87,5 +98,5 @@ function draw() {
 
   noStroke();
   fill(255, 0, 0);
-  rect(food.x, food.y, 1, 1);
+  rect(food.x, food.y, 1, 1);*/
 }
