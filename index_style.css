@@ -78,6 +78,9 @@ svg {
 canvas {
     display: block;
     position: absolute;
+    top:0;
+    left:50%;
+    transform:translate(-50%,0)
 }
 .button{
     --t:0;
