@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script><!--keywords:width height keycode-->
+    <script src="p5.js"></script><!--keywords:width height keycode-->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script> if sound is not needed then this is unecessary-->
     <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script><!--teachable machine model-->
     <link rel="stylesheet" type="text/css" href="index_style.css">
@@ -18,10 +18,10 @@
             <text x="-2" y="112" textLength="0" font-family="" font-style="bold" fill="#000" font-size="143px" transform="scale(0.0085,0.0085)">⚙</text>
         </clipPath>
     </svg>
-    <script src="sketch.js"></script>
-    <script src="snake.js"></script>
+    <!--<script src="sketch.js"><script src="snake.js"></script></script>-->
     <script src="index.js"></script>
     <div id="main">
+        <div id="main_canvas_wrapper"></div>
         <div class="quality_label" style="--T:0;transition: --T 0s;
         --msk:radial-gradient(at center center, #000 calc(100% * sin(45deg) * var(--T) - 1px), #0000 calc(100% * sin(45deg) * var(--T)));
         -webkit-mask:var(--msk);mask:var(--msk)">
@@ -50,7 +50,7 @@
             --u:0;
             box-shadow: inset 0 0 calc(10px) rgb(calc(64 - 64 * var(--t)),calc(64 - 64 * var(--t)),calc(64 - 64 * var(--t)));
             background-color: rgb(calc(192 - 16 * var(--W)),calc(192 - 16 * var(--W)),calc(192 - 16 * var(--W)));"
-            onclick="style.setProperty('--u', 1 - parseInt(style.getPropertyValue('--u')));get_label()">
+            onclick="style.setProperty('--u', 1 - parseInt(style.getPropertyValue('--u')));get_score()">
             <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%); background-color: rgb(64,64,64); width: 50%; height: 50%; clip-path: url(#cam_svg);"></div>
             <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%); background-color: rgb(96,96,96); width: 45%; height: 45%; clip-path: url(#cam_svg);"></div>
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background-color: rgb(calc(191 + 32 * var(--W)),calc(191 + 32 * var(--W)),calc(191 + 32 * var(--W))); width: 20%; height: 20%; clip-path: circle(50% at 50% 50%);"></div>
@@ -69,23 +69,23 @@
                     <div style="flex-grow: 1;width: 100%;background-color: black;overflow-x: hidden; overflow-y: auto;font-size: 0;border-radius: 5px;" data-posture="auto">
                         <div class="dropdown_glyph posture_item" style="background-image: url(assets/posture_auto_m.png); background-size: cover;--u:1;box-shadow: inset black 0 0 calc(8px * var(--u)); background-color: white;"
                         onclick="document.getElementById('selected_posture').style.setProperty('background-image',this.style.getPropertyValue('background-image'));document.getElementById('selected_posture').style.setProperty('background-color',this.style.getPropertyValue('background-color'));
-                        document.getElementById('selected_posture').setAttribute('data-posture',this.getAttribute('data-posture'));
+                        global_var['cur_posture'] = this.getAttribute('data-posture'); document.getElementById('selected_posture').setAttribute('data-posture',global_var['cur_posture']);
                         set_class_style('posture_item','--u',0),this.style.setProperty('--u',1)" data-posture="auto"></div>
                         <div class="dropdown_glyph posture_item" style="background-image: url(assets/posture_ladder_m.png); background-size: cover;--u:0;box-shadow: inset black 0 0 calc(8px * var(--u)); background-color: orange;"
                         onclick="document.getElementById('selected_posture').style.setProperty('background-image',this.style.getPropertyValue('background-image'));document.getElementById('selected_posture').style.setProperty('background-color',this.style.getPropertyValue('background-color'));
-                        document.getElementById('selected_posture').setAttribute('data-posture',this.getAttribute('data-posture'));
+                        global_var['cur_posture'] = this.getAttribute('data-posture'); document.getElementById('selected_posture').setAttribute('data-posture',global_var['cur_posture']);
                         set_class_style('posture_item','--u',0),this.style.setProperty('--u',1)" data-posture="ladder"></div>
                         <div class="dropdown_glyph posture_item" style="background-image: url(assets/posture_sitting_m.png); background-size: cover; background-color: greenyellow;--u:0;box-shadow: inset black 0 0 calc(8px * var(--u));"
                         onclick="document.getElementById('selected_posture').style.setProperty('background-image',this.style.getPropertyValue('background-image'));document.getElementById('selected_posture').style.setProperty('background-color',this.style.getPropertyValue('background-color'));
-                        document.getElementById('selected_posture').setAttribute('data-posture',this.getAttribute('data-posture'));
+                        global_var['cur_posture'] = this.getAttribute('data-posture'); document.getElementById('selected_posture').setAttribute('data-posture',global_var['cur_posture']);
                         set_class_style('posture_item','--u',0),this.style.setProperty('--u',1)" data-posture="sitting"></div>
                         <div class="dropdown_glyph posture_item" style="background-image: none;background-color: green;--u:0;box-shadow: inset black 0 0 calc(8px * var(--u));" onclick="set_class_style('posture_item','--u',0),this.style.setProperty('--u',1)"></div>
                         <div class="dropdown_glyph posture_item" style="background-image: none;--u:0;box-shadow: inset black 0 0 calc(8px * var(--u));" onclick="set_class_style('posture_item','--u',0),this.style.setProperty('--u',1)"></div>
                     </div>
                 </div>
                 <div class="button" style="position: absolute;left:25%; bottom: 50px; --length:50px; width:var(--length); height:30px; background: linear-gradient(to right, #f00 calc(var(--length) * 0.5),#00f calc(var(--length) * 0.5)); border-radius: 100svh;
-                    --u:0;"
-                    onclick="style.setProperty('--u', 1 - parseInt(style.getPropertyValue('--u'))); //set_gestures(style.getPropertyValue('--u'))">
+                    --u:0;cursor: pointer;"
+                    onclick="style.setProperty('--u', 1 - parseInt(style.getPropertyValue('--u'))); set_gestures(style.getPropertyValue('--u'))">
                     <div style="position: absolute;top:50%;left:50%;transform: translate(-50%,-50%);--radius:30px;width:calc(2 * var(--radius) + var(--length)); height:calc(2 * var(--radius));
                         background: top left / 100% 100% no-repeat radial-gradient(circle at calc(var(--radius) + var(--length) * var(--U)) var(--radius),#0000 calc(var(--radius) * 0.8),#000 calc(var(--radius) + 0px),#0000 calc(var(--radius) + 1px)); background-color: white;
                         clip-path: circle(calc(var(--radius) - 0.01px) at calc(var(--radius) + var(--length) * var(--U)) center);"> <!-- pixels not clearing properly when using fast integer method, 0.01px is subtracted to force it to use slow but accurate method -->
