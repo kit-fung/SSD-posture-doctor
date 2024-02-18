@@ -12,10 +12,10 @@
 <body>
     <svg>
         <clipPath id="cam_svg" clipPathUnits="objectBoundingBox"> <!-- scale = 1/textLength,1/textLength ; y ~= font-size -->
-            <text x="-18" y="128" textLength="0" font-family="" fill="#000" font-size="143px" transform="scale(0.00625,0.00625)">📷</text>
+            <text x="0" y="135" textLength="0" font-family="TwitterColorEmoji" fill="#000" font-size="143px" transform="scale(0.007,0.007)">📷</text>
         </clipPath>
         <clipPath id="gear_svg" clipPathUnits="objectBoundingBox"> <!-- scale = 1/textLength,1/textLength ; y ~= font-size -->
-            <text x="-2" y="112" textLength="0" font-family="" font-style="bold" fill="#000" font-size="143px" transform="scale(0.0085,0.0085)">⚙</text>
+            <text x="0" y="125" textLength="0" font-family="TwitterColorEmoji" fill="#000" font-size="143px" transform="scale(0.007,0.007)">⚙</text>
         </clipPath>
     </svg>
     <!--<script src="sketch.js"><script src="snake.js"></script></script>-->
@@ -45,21 +45,35 @@
             <div style="position: absolute;top:47%;left:51%;transform: translate(-50%,-50%);color:#444;font-size: calc(0.6 * var(--size));font-weight: 900;">劣</div>
             <div style="position: absolute;top:0;left:0;width: 100%;height: 100%;background-color: #444;opacity: calc(1 - var(--T) * var(--T) * var(--T) * var(--T));"></div>
         </div>
+        <div style="position: absolute;top:50%;left:50%;transform: translate(-50%,-50%);"><img id="accessory_alert" style="object-fit: cover;max-width: 50svw;max-height: 100svh;" src="" alt=""></div>
         <div class="button" id="cam_btn"
-        style="position: absolute;bottom: 5%;left:50%;width:5em;height:5em;border-radius: 100svh; transform: translate(-50%,0);
+        style="position: absolute;bottom: 5%;left:50%;width:5em;height:5em;border-radius: 5em; transform: translate(-50%,0);
             --u:0;
             box-shadow: inset 0 0 calc(10px) rgb(calc(64 - 64 * var(--t)),calc(64 - 64 * var(--t)),calc(64 - 64 * var(--t)));
             background-color: rgb(calc(192 - 16 * var(--W)),calc(192 - 16 * var(--W)),calc(192 - 16 * var(--W)));"
             onclick="style.setProperty('--u', 1 - parseInt(style.getPropertyValue('--u')));get_score()">
-            <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%); background-color: rgb(64,64,64); width: 50%; height: 50%; clip-path: url(#cam_svg);"></div>
-            <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%); background-color: rgb(96,96,96); width: 45%; height: 45%; clip-path: url(#cam_svg);"></div>
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background-color: rgb(calc(191 + 32 * var(--W)),calc(191 + 32 * var(--W)),calc(191 + 32 * var(--W))); width: 20%; height: 20%; clip-path: circle(50% at 50% 50%);"></div>
+            <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%); background-color: rgb(32,32,32); width: 50%; height: 50%; clip-path: url(#cam_svg);"></div>
+            <!--<div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%); background-color: rgb(96,96,96); width: 45%; height: 45%; clip-path: url(#cam_svg);"></div>-->
+            <div style="position: absolute; top: 50.4%; left: 54.1%; transform: translate(-50%,-50%); background-color: rgb(calc(191 + 32 * var(--W)),calc(191 + 32 * var(--W)),calc(191 + 32 * var(--W))); width: 20%; height: 20%; clip-path: circle(48% at 50% 50%);"></div>
+            <div id="canvas_color_pick_viewer" style="position: absolute; width: 100%;height: 100%;border-radius: 100%;--r:0;--g:0;--b:0;background: 0 0 / 100% 100% no-repeat radial-gradient(circle at center, rgb(var(--r),var(--g),var(--b)) calc(50% - 1px),#fff calc(50%)); display:none"></div>
         </div>
         <div class="button" id="right_wrapper" style="--u:0;--size:300px; right:calc(var(--size) * var(--t));">
             <div style="position: fixed;top:0;right:0;width: 50px;height: 50px;background-color: rgb(161,161,161);transform: translate(0%,0); border-radius: 10px 0 0 10px;">
                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background-color: rgb(64,64,64); width: 100%; height: 100%; clip-path: url(#gear_svg);"></div>
             </div>
             <div style="position: absolute;top:0;left:0;width: var(--size);height: 100svh;background-color: grey;transform: translate(0,0);">
+                <div class="button" style="position: absolute;left:25%; bottom: 50px; --length:50px; width:var(--length); height:30px; background: linear-gradient(to right, #f00 calc(var(--length) * 0.5),#00f calc(var(--length) * 0.5)); border-radius: 100svh;
+                    --u:0;cursor: pointer;"
+                    onclick="style.setProperty('--u', 1 - parseInt(style.getPropertyValue('--u'))); global_var['gender'] = style.getPropertyValue('--u') == 0 ? 'm' : 'f'; set_gestures(global_var['gender'])">
+                    <div style="position: absolute;top:50%;left:50%;transform: translate(-50%,-50%);--radius:30px;width:calc(2 * var(--radius) + var(--length)); height:calc(2 * var(--radius));
+                        background: top left / 100% 100% no-repeat radial-gradient(circle at calc(var(--radius) + var(--length) * var(--U)) var(--radius),#0000 calc(var(--radius) * 0.8),#000 calc(var(--radius) + 0px),#0000 calc(var(--radius) + 1px)); background-color: white;
+                        clip-path: circle(calc(var(--radius) - 0.01px) at calc(var(--radius) + var(--length) * var(--U)) center);"> <!-- pixels not clearing properly when using fast integer method, 0.01px is subtracted to force it to use slow but accurate method -->
+                        <div style="display: block;position: absolute;left:calc(50% - var(--length) * 0.5);top:49%;transform: translate(-50%,-50%); font-size: calc(var(--radius) * 1);user-select: none;">男</div>
+                        <div style="display: block;position: absolute;left:calc(50% + var(--length) * 0.5);top:49%;transform: translate(-50%,-50%); font-size: calc(var(--radius) * 1);user-select: none;">女</div>
+                    </div>
+                </div>
+                <div class="button skin_tone_viewer" style="--u:0; position: absolute; left:25%; bottom:200px; width:100px; height:50px;--r:0;--g:0;--b:0;background-color: rgb(var(--r),var(--g),var(--b));cursor:url(assets/eyedropper.cur),auto;"
+                    onclick="ArrayUnion(global_var['getting_canvas_color'],'skin_tone')"></div>
                 <div class="button" style="position: absolute; top: 50px;left: 25%; width: 100px; background-color: transparent;
                     display: flex; flex-direction: column;
                     --u:0;
@@ -83,18 +97,10 @@
                         <div class="dropdown_glyph posture_item" style="background-image: none;--u:0;box-shadow: inset black 0 0 calc(8px * var(--u));" onclick="set_class_style('posture_item','--u',0),this.style.setProperty('--u',1)"></div>
                     </div>
                 </div>
-                <div class="button" style="position: absolute;left:25%; bottom: 50px; --length:50px; width:var(--length); height:30px; background: linear-gradient(to right, #f00 calc(var(--length) * 0.5),#00f calc(var(--length) * 0.5)); border-radius: 100svh;
-                    --u:0;cursor: pointer;"
-                    onclick="style.setProperty('--u', 1 - parseInt(style.getPropertyValue('--u'))); set_gestures(style.getPropertyValue('--u'))">
-                    <div style="position: absolute;top:50%;left:50%;transform: translate(-50%,-50%);--radius:30px;width:calc(2 * var(--radius) + var(--length)); height:calc(2 * var(--radius));
-                        background: top left / 100% 100% no-repeat radial-gradient(circle at calc(var(--radius) + var(--length) * var(--U)) var(--radius),#0000 calc(var(--radius) * 0.8),#000 calc(var(--radius) + 0px),#0000 calc(var(--radius) + 1px)); background-color: white;
-                        clip-path: circle(calc(var(--radius) - 0.01px) at calc(var(--radius) + var(--length) * var(--U)) center);"> <!-- pixels not clearing properly when using fast integer method, 0.01px is subtracted to force it to use slow but accurate method -->
-                        <div style="display: block;position: absolute;left:calc(50% - var(--length) * 0.5);top:49%;transform: translate(-50%,-50%); font-size: calc(var(--radius) * 1);user-select: none;">男</div>
-                        <div style="display: block;position: absolute;left:calc(50% + var(--length) * 0.5);top:49%;transform: translate(-50%,-50%); font-size: calc(var(--radius) * 1);user-select: none;">女</div>
-                    </div>
-                </div>
             </div>
         </div>
+        <div id="canvas_color_pick_field" style="cursor:url(assets/eyedropper.cur),auto;position:fixed;top:0;left:50%;transform: translate(-50%,0);width:50svw;height:100svh;background-color:#f000;display:block"
+            onclick="global_var['getting_canvas_color'].shift()"></div>
     </div>
 </body>
 </html>
