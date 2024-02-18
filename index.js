@@ -111,7 +111,7 @@ function draw() { // this function calls every frame
         let temp_scale = 0.2
         let temp_length = Object.keys(img_tally).length
         for(let i=0; i < temp_length;){
-            image(img_tally[Object.keys(img_tally)[temp_length - i - 1]]['img'], width * temp_scale * i, 0.5 * (height - width * video.height / video.width * temp_scale), width * temp_scale, width * video.height / video.width * temp_scale)
+            image(img_tally[Object.keys(img_tally)[temp_length - i - 1]]['img'], width * temp_scale * i, height - width * video.height / video.width * temp_scale, width * temp_scale, width * video.height / video.width * temp_scale)
             i++
             if(width * temp_scale * i > width){break}
         }
