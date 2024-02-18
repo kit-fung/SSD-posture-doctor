@@ -38,6 +38,9 @@
     inherits: true;
     initial-value: 0;
 }
+
+@font-face { font-family: TwitterColorEmoji; src: url('assets/TwitterColorEmoji-SVGinOT.ttf'); } 
+
 html, body{
     block-size: 100%;
     scroll-snap-type: y mandatory;
