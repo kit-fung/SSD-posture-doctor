@@ -22,7 +22,7 @@ function preload(){
             permissionStatus.onchange = () => {
                 console.log(`camera permission status has changed to ${permissionStatus.state}`,)
             }
-    })
+    })// not implemented camera detection
     window.addEventListener('online',() => {cur_accessories['internet'] = navigator.onLine})
     window.addEventListener('offline',() => {cur_accessories['internet'] = navigator.onLine})
     window.addEventListener('mousemove',(e) => {cur_mouse = e})
@@ -63,7 +63,7 @@ function classifyVideo(key) {
         console.log("classifying:",key)
         AddClassifier(key)
         let temp_key = video.canvas.toDataURL('image/jpeg',1.0)
-        classifier[key].classify(video, gotResults).then((t)=>{img_tally[temp_key] = {'img':loadImage(temp_key),'result':t}},(f)=>{console.log(f)})
+        classifier[key].classify(video, gotResults).then((t)=>{img_tally[temp_key] = {'img':loadImage(temp_key),'result':t,'posture':global_var['cur_posture']}},(f)=>{console.log(f)})
     }
 }
 
@@ -170,7 +170,12 @@ function get_label(score){
         temp[i].style.setProperty('--T',0)
         temp[i].style.setProperty('transition','--T 0s')
     }
-    setTimeout(() => {key_score = score >= score_map[global_var['cur_posture']]['well'] ? 0 : (score >= score_map[global_var['cur_posture']]['good'] ? 1 : 2);temp[key_score].style.setProperty('--T',1);temp[key_score].style.setProperty('transition','--T 0.3s');},0)
+    console.log(document.querySelector('.quality_label'))
+    setTimeout(() => {key_score = interpret_score(score);
+    temp[key_score].style.setProperty('--T',1);temp[key_score].style.setProperty('transition','--T 0.3s');},0)
+}
+function interpret_score(score){
+    return score >= score_map[global_var['cur_posture']]['well'] ? 0 : (score >= score_map[global_var['cur_posture']]['good'] ? 1 : 2)
 }
 function set_gestures(Val){
     temp = document.getElementsByClassName('posture_item')
@@ -202,4 +207,41 @@ function update_accessories(){
         document.getElementById('accessory_alert').setAttribute('src',"assets/permission_camera_cn.png")
         document.getElementById('cam_btn').style.setProperty('display','none')
     }
+}
+function after(){
+    const share_ui = document.querySelector('.share_ui')
+    const share_overlay = document.querySelector('.share_overlay')
+    const share_button = document.querySelector('.share_this')
+    console.log(share_ui,share_overlay,share_button)
+    share_button.addEventListener('click',()=>{
+        const IMG_KEY = Object.keys(img_tally)[Object.keys(img_tally).length - 1]// will be updated to enable image editing, {img_key: {history:[mod1,mod2],edited_img:key}}
+        const SHARE_DATA = {
+                title:'my record',
+                url:window.document.location.href,
+                text:`我得到 - ${Array('佳!','良','劣')[interpret_score(img_tally[IMG_KEY]['result'].find((bracket)=>bracket['label'] == score_map[img_tally[IMG_KEY]['posture']]['label'])['confidence'])]}`,
+                files: Array(createFile(IMG_KEY))
+        }
+        if (navigator.share && navigator.canShare && navigator.canShare(SHARE_DATA)){
+            console.log('has share api')
+            navigator.share(SHARE_DATA).then(() => {console.log('share success?')}).catch((error)=>{console.log(error)})
+        }
+        else{
+            console.log('doesn\'t have share api')
+            share_overlay.classList.add('show_fallback_share')
+            share_ui.classList.add('show_fallback_share')
+        }
+    })
+    share_overlay.addEventListener('click',()=>{
+        share_overlay.classList.remove('show_fallback_share')
+        share_ui.classList.remove('show_fallback_share')
+    })
+}
+function createFile(_data,_name = null){
+    //console.log(_data)
+    var arr = _data.split(','), _format = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    console.log(_format)
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr],`${_name == null ? 'null' : _name}.${_format.split('/')[1]}`,{type:_format})
 }
