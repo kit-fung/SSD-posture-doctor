@@ -69,7 +69,21 @@ img {
     user-select: none;
     -webkit-user-drag: none;
 }
-
+button{
+    border: 0;
+    padding: 5px 10px;
+    font-size: 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    background: #4488ff;
+    color: #ffffff;
+    font-weight:900;
+    will-change: background;
+    transition: background 1s;
+    &:hover{
+        background: #ff88ff;
+    }
+}
 svg {
     position: absolute;
     opacity: 0;
@@ -105,13 +119,7 @@ canvas {
     font-size: 0;
     user-select: none;
 }
-.dropdown_glyph{
-    display: inline-block;
-    width: 100%;
-    aspect-ratio: 1/1;
-    background-color: orange;
-    border-radius: 5px;
-}
+
 #main{
     width: 100svw;
     height: 100svh;
@@ -126,6 +134,31 @@ canvas {
     width:0;
     height:0;
     overflow: visible;
+
+    .dropdown_glyph{
+        display: inline-block;
+        width: 100%;
+        aspect-ratio: 1/1;
+        background-color: orange;
+        border-radius: 5px;
+    }
+}
+.share_ui{
+    
+    button{
+        background: #4488ff;
+        color: #ffffff;
+        font-weight:900;
+        &:hover{
+            background: #ff88ff;
+    }
+}
+}
+.share_ui, .share_overlay{
+    display:none
+}
+.show_fallback_share{
+    display:block
 }
 @media only screen and (max-width:960px),
 (max-height:540px) {
