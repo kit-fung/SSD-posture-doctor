@@ -9,7 +9,7 @@
     <script src="https://unpkg.com/ml5@0.4.3/dist/ml5.min.js"></script><!--teachable machine model-->
     <link rel="stylesheet" type="text/css" href="index_style.css">
 </head>
-<body>
+<body onload="after()">
     <svg>
         <clipPath id="cam_svg" clipPathUnits="objectBoundingBox"> <!-- scale = 1/textLength,1/textLength ; y ~= font-size -->
             <text x="0" y="135" textLength="0" font-family="TwitterColorEmoji" fill="#000" font-size="143px" transform="scale(0.007,0.007)">📷</text>
@@ -46,6 +46,7 @@
             <div style="position: absolute;top:0;left:0;width: 100%;height: 100%;background-color: #444;opacity: calc(1 - var(--T) * var(--T) * var(--T) * var(--T));"></div>
         </div>
         <div style="position: absolute;top:50%;left:50%;transform: translate(-50%,-50%);"><img id="accessory_alert" style="object-fit: cover;max-width: 50svw;max-height: 100svh;" src="" alt=""></div>
+        <button class="share_this" style="position: absolute; bottom: 5%;right:26%">分享</button>
         <div class="button" id="cam_btn"
         style="position: absolute;bottom: 5%;left:50%;width:5em;height:5em;border-radius: 5em; transform: translate(-50%,0);
             --u:0;
@@ -101,6 +102,13 @@
         </div>
         <div id="canvas_color_pick_field" style="cursor:url(assets/eyedropper.cur),auto;position:fixed;top:0;left:50%;transform: translate(-50%,0);width:50svw;height:100svh;background-color:#f000;display:block"
             onclick="global_var['getting_canvas_color'].shift()"></div>
+        <div class="share_overlay" style="position: absolute;width: 100svw;height:100svh; background: #0008; backdrop-filter: blur(10px);"></div>
+        <div class="share_ui" style="position: absolute; left: 50% ;top: 50%; transform: translate(-50%,-50%); background-color: #fff; padding: 10px;">
+            <h2>share your record</h2>
+            <button>social link</button>
+            <button>social link</button>
+            <button>social link</button>
+        </div>
     </div>
 </body>
 </html>
