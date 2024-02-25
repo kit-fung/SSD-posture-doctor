@@ -46,6 +46,9 @@ html, body{
     scroll-snap-type: y mandatory;
     scroll-snap-stop: always;
     overflow-x: hidden;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
     /*block-size: 100%; overflow-x: hidden;*/ /* botch scroll listener, but necessary to smooth scroll*/
 }
 body{
@@ -70,6 +73,7 @@ img {
     -webkit-user-drag: none;
 }
 button{
+    -webkit-user-drag: none;
     border: 0;
     padding: 5px 10px;
     font-size: 20px;
@@ -92,13 +96,13 @@ svg {
     user-select: none;
     -webkit-user-drag: none;
 }
-canvas {
+/*canvas {
     display: block;
     position: absolute;
     top:0;
     left:50%;
     transform:translate(-50%,0)
-}
+}*/
 .button{
     --t:0;
     --T: var(--t);
@@ -109,16 +113,7 @@ canvas {
 .button:hover{
     --t:1;
 }
-.quality_label{
-    position: absolute;
-    bottom: 20%;
-    left: 60%;
-    --size: 150px;
-    width: var(--size);
-    aspect-ratio: 1/1;
-    font-size: 0;
-    user-select: none;
-}
+
 
 #main{
     width: 100svw;
@@ -126,23 +121,57 @@ canvas {
     background-color: rgb(100,120,255);
     position: absolute;
     overflow: hidden;
-}
-#right_wrapper{
-    position: absolute;
-    right:0;
-    top:0;
-    width:0;
-    height:0;
-    overflow: visible;
+    #main_canvas_wrapper{
+        #album_wrapper{
+            font-size: 0;
 
-    .dropdown_glyph{
-        display: inline-block;
-        width: 100%;
+            .frame{
+                position: relative;
+                display: inline;
+                canvas{
+                    position: relative;
+                    will-change: transform;
+                    transition: transform 0.5s;
+                    transform: scale(1);
+                }
+                canvas:hover{
+                    transform: scale(1.1);
+                    z-index: 1;
+                }
+            }
+        }
+        #album_wrapper::-webkit-scrollbar{
+            width: 0;
+        }
+    }
+    .quality_label{
+        position: absolute;
+        bottom: 20%;
+        left: 60%;
+        --size: 150px;
+        width: var(--size);
         aspect-ratio: 1/1;
-        background-color: orange;
-        border-radius: 5px;
+        font-size: 0;
+        user-select: none;
+    }
+    #right_wrapper{
+        position: absolute;
+        right:0;
+        top:0;
+        width:0;
+        height:0;
+        overflow: visible;
+
+        .dropdown_glyph{
+            display: inline-block;
+            width: 100%;
+            aspect-ratio: 1/1;
+            background-color: orange;
+            border-radius: 5px;
+        }
     }
 }
+
 .share_ui{
     
     button{
@@ -159,6 +188,24 @@ canvas {
 }
 .show_fallback_share{
     display:block
+}
+/*.picking_color_default_show{
+    display:block;
+}*/
+.picking_color_default_hide{
+    display:none;
+}
+.picking_color_show{
+    display:block;
+}
+.picking_color_hide{
+    display:none;
+}
+.accessory_fail{
+    display:none;
+}
+.page_hide{
+    display:none;
 }
 @media only screen and (max-width:960px),
 (max-height:540px) {
