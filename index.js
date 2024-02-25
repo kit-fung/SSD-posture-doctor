@@ -56,6 +56,7 @@ async function setCameraConstraint(_facingMode = null){
     (_stream) => {cur_accessories['permit_camera'] = true; console.log(video)})
     video.hide();
     video.id('viewport')*/
+    if(video){video.remove()} // see if this removes camera permission or persistence
     let _constraint
     _constraint = _constraint = {video: {width: 1920*10, height: 1080*10, frameRate: { min: 1, max: 360 }}}
     if (_facingMode){_constraint['video']['facingMode'] =  _facingMode}
