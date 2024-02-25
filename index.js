@@ -10,7 +10,7 @@ var cur_mouse
 var cur_accessories = {}
 //var pager = {'cur_page':'main','scroll':{'main':0,'album':30},'pre_scroll':{'main':0,'album':30}}
 var pager = {}
-var global_var = {'gender' : 'm', 'cur_posture':'auto','skin_tone':{'r': 255, 'g':220,'b': 200},'getting_canvas_color':Array(),'pre_getting_canvas_color_state':false}
+var global_var = {'gender' : 'm', 'cur_posture':'auto','skin_tone':{'r': 255, 'g':220,'b': 200},'getting_canvas_color':Array(),'pre_getting_canvas_color_state':false,'curFacingMode':'user'}
 let obj_classifiers = {'auto':"UjzJujuZr"}
 let score_map = {'auto':{'label':'fist','well':0.8,'good':0.5}}
 var img_tally = {}
@@ -49,7 +49,23 @@ function AddClassifier(key) {
         classifier[key] = ml5.imageClassifier(`https://teachablemachine.withgoogle.com/models/${obj_classifiers[key]}/model.json`);
     }
 }
-
+async function setCameraConstraint(_facingMode = null){
+    /*stream = await navigator.mediaDevices.getUserMedia({video: {width: 1920*10, height: 1080*10}})
+    console.log(stream.getVideoTracks()[0].getSettings())
+    video = createCapture({video: stream.getVideoTracks()[0].getSettings()},
+    (_stream) => {cur_accessories['permit_camera'] = true; console.log(video)})
+    video.hide();
+    video.id('viewport')*/
+    let _constraint
+    _constraint = _constraint = {video: {width: 1920*10, height: 1080*10, frameRate: { min: 1, max: 360 }}}
+    cur_accessories['loading_camera'] = true
+    if (_facingMode){global_var['curFacingMode'] = _facingMode;_constraint['facingMode'] =  {ideal : _facingMode}}
+    video = await createCapture(_constraint,
+        (_stream) => {cur_accessories['permit_camera'] = true; cur_accessories['loading_camera'] = false; stream = _stream;console.log(stream.getVideoTracks()[0].getSettings(),stream.getVideoTracks()[0].getSettings().frameRate);console.log(video);
+        frameRate(stream.getVideoTracks()[0].getSettings().frameRate)})
+    video.hide();
+    video.id('viewport')
+}
 function setup() {
     main_canvas = createCanvas(0, 0)
     update_canvas()
@@ -61,22 +77,8 @@ function setup() {
     cur_accessories['internet'] = navigator.onLine
     cur_accessories['permit_camera'] = false
     cur_accessories['found_camera'] = false
-    async function getAllCamera(){
-        /*stream = await navigator.mediaDevices.getUserMedia({video: {width: 1920*10, height: 1080*10}})
-        console.log(stream.getVideoTracks()[0].getSettings())
-        video = createCapture({video: stream.getVideoTracks()[0].getSettings()},
-        (_stream) => {cur_accessories['permit_camera'] = true; console.log(video)})
-        video.hide();
-        video.id('viewport')*/
-        video = await createCapture({video: {width: 1920*10, height: 1080*10, frameRate: { min: 1, max: 360 }}},
-            (_stream) => {cur_accessories['permit_camera'] = true; stream = _stream;console.log(stream.getVideoTracks()[0].getSettings(),stream.getVideoTracks()[0].getSettings().frameRate);console.log(video);
-            frameRate(stream.getVideoTracks()[0].getSettings().frameRate)})
-        video.hide();
-        video.id('viewport')
-        //update_accessories()//not necessary since it does it every draw
-    }
-    getAllCamera()
     
+    setCameraConstraint(global_var['curFacingMode'])
 }
 
 function classifyVideo(key) {
@@ -250,20 +252,27 @@ function set_gestures(Val){
 }
 function update_accessories(){
     if(cur_accessories['permit_camera']){
-        if(cur_accessories['found_camera']){
-            if(cur_accessories['internet']){
-                document.getElementById('accessory_alert').setAttribute('src',"")
-                document.getElementById('cam_btn').classList.remove('accessory_fail')
-                document.getElementById('right_wrapper').classList.remove('accessory_fail')
+        if(!cur_accessories['loading_camera']){
+            if(cur_accessories['found_camera']){
+                if(cur_accessories['internet']){
+                    document.getElementById('accessory_alert').setAttribute('src',"")
+                    document.getElementById('cam_btn').classList.remove('accessory_fail')
+                    document.getElementById('right_wrapper').classList.remove('accessory_fail')
+                }
+                else{
+                    document.getElementById('accessory_alert').setAttribute('src',"assets/no-access_internet_cn.png")
+                    document.getElementById('cam_btn').classList.add('accessory_fail')
+                    document.getElementById('right_wrapper').classList.add('accessory_fail')
+                }
             }
             else{
-                document.getElementById('accessory_alert').setAttribute('src',"assets/no-access_internet_cn.png")
+                document.getElementById('accessory_alert').setAttribute('src',"assets/missing_camera_cn.png")
                 document.getElementById('cam_btn').classList.add('accessory_fail')
                 document.getElementById('right_wrapper').classList.add('accessory_fail')
             }
         }
         else{
-            document.getElementById('accessory_alert').setAttribute('src',"assets/missing_camera_cn.png")
+            document.getElementById('accessory_alert').setAttribute('src',"assets/loading_camera_cn.png")
             document.getElementById('cam_btn').classList.add('accessory_fail')
             document.getElementById('right_wrapper').classList.add('accessory_fail')
         }
