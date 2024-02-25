@@ -59,7 +59,7 @@ async function setCameraConstraint(_facingMode = null){
     let _constraint
     _constraint = _constraint = {video: {width: 1920*10, height: 1080*10, frameRate: { min: 1, max: 360 }}}
     cur_accessories['loading_camera'] = true
-    if (_facingMode){global_var['curFacingMode'] = _facingMode;_constraint['facingMode'] =  {ideal : _facingMode}}
+    if (_facingMode){global_var['curFacingMode'] = _facingMode;_constraint['video']['facingMode'] =  {ideal : _facingMode}}
     video = await createCapture(_constraint,
         (_stream) => {cur_accessories['permit_camera'] = true; cur_accessories['loading_camera'] = false; stream = _stream;console.log(stream.getVideoTracks()[0].getSettings(),stream.getVideoTracks()[0].getSettings().frameRate);console.log(video);
         frameRate(stream.getVideoTracks()[0].getSettings().frameRate)})
