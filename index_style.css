@@ -75,12 +75,13 @@ img {
 button{
     -webkit-user-drag: none;
     border: 0;
-    padding: 5px 10px;
     font-size: 20px;
-    margin-top: 10px;
     cursor: pointer;
     background: #4488ff;
     color: #ffffff;
+    height: calc(min(1svw * 9 / 16,1svh) * 15);
+    border-radius: calc(min(1svw * 9 / 16,1svh) * 2);
+    font-size: calc(min(1svw * 9 / 16,1svh) * 10);
     font-weight:900;
     will-change: background;
     transition: background 1s;
